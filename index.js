@@ -1,26 +1,24 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+import got from 'got';
+import express from 'express';
+import bodyParser from 'body-parser';
 const app = express();
 const port = 8080;
-const slack_webhook_url = "https://hooks.slack.com/services/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"
+const slack_webhook_url = ""
+
 const site_name = "api-demo-data-site"
 
 var insert_cache = [];
 
-function sendSlackMessage(message, webhook_url) {
-    var request = require('request');
+async function sendSlackMessage(message, webhook_url) {
+    
     var options = {
-        'method': 'POST',
-        'url': webhook_url,
-        'headers': {
+        headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(message)
+        json: message
     };
-    request(options, function (error, response) {
-        if (error) throw new Error(error);
-        console.log(response.body);
-    });
+    var response = await got.post(webhook_url,options)
+    console.log(response.body);
 }
 
 app.use(bodyParser.json());
